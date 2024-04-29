@@ -1,0 +1,55 @@
+@model KullaniciDuzenlemeModeli
+<h2>Kullanıcı Düzenle</h2>
+<hr />
+<form asp-action="Duzenle" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <div class="mb-3">
+        <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="control-label">E-posta</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Parola Güncelle
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label asp-for="Password" class="control-label">Parola</label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="control-label">Parola Tekrar</label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-header">
+            Roller
+        </div>
+        <div class="card-body">
+            @foreach (var role in ViewBag.Roles)
+            {
+                <div class="form-check">
+                    <input name="SeciliRol" type="checkbox" value="@role" id="@role" class="form-check-input"
+                    @(Model.SeciliRol.Any(i => i == role) ? "checked" : "") />
+                    <label class="form-check-label" for="@role">@role</label>
+                </div>
+            }
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+</form>

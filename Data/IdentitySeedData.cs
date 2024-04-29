@@ -5,7 +5,7 @@ namespace BilirkisiMvc.Data
 {
     public class IdentitySeedData
     {
-        private const string adminUser = "Admin";
+        private const string adminUser = "admin";
         private const string adminPassword = "Admin_123";
 
         public static async void IdentityTestUser(IApplicationBuilder app)
