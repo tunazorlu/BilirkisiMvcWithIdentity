@@ -19,10 +19,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<VtBaglaci>();
 
 builder.Services.Configure<IdentityOptions>(options =>
-{    
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+{
+
     options.Lockout.AllowedForNewUsers = true; // Yeni kullanıcılar için varsayılan olarak kilitlenme özelliği açık olacak.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+    options.Lockout.MaxFailedAccessAttempts = 5;
 
     options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
@@ -36,8 +37,16 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 });
 
+
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIzMDA2OEAzMjM1MmUzMDJlMzBNVm95S1dkOTdncEgwb0trb2FCRXltWmpnbUJBWDVzQjdPaUpaZmlRaE5FPQ==");
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Hesap/Giris";
+    options.AccessDeniedPath = "/Hesap/YetkiHatasi";
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,8 +61,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

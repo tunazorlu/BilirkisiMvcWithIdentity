@@ -1,0 +1,24 @@
+@model GirisModeli
+
+<h2>Giriş Yap</h2>
+<hr />
+<form asp-action="Ekle" method="post">
+    <div class="mb-3">
+        <label asp-for="Eposta" class="control-label">E-posta</label>
+        <input asp-for="Eposta" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="control-label">Parola</label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-check mb-3">
+
+        <input asp-for="BeniHatirla" class="form-check-input" />
+        <label asp-for="BeniHatirla" class="form-check-label">Bunu Hatirla</label>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+</form>
