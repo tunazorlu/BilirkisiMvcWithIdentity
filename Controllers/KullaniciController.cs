@@ -75,6 +75,7 @@ public class KullaniciController(UserManager<IdentityUser> userManager, RoleMana
             {
                 user.UserName = model.UserName;
                 user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
                 var result = await userManager.UpdateAsync(user);
 
                 if (result.Succeeded && !string.IsNullOrEmpty(model.Password))

@@ -17,6 +17,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Syncfusion.AspNet.Mvc5" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Licensing" Version="25.1.42" />
   </ItemGroup>
 
 </Project>

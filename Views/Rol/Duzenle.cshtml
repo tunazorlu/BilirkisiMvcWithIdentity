@@ -17,7 +17,9 @@
 
 <hr />
 
-<table class="table table-sm table-bordered">
+<h2>@Model.Name Rolü Atanmış Kullanıcılar</h2>
+<br />
+<table style="vertical-align:middle;" class="table table-sm table-bordered">
     <thead>
         <tr>
             <th>Id</th>
@@ -45,8 +47,7 @@
                         <td>@user.UserName</td>
                         <td>@user.Email</td>
                         <td>
-                            <a asp-controller="Kullanici" asp-action="Duzenle" asp-route-id="@user.Id"
-                                class="btn btn-primary btn-sm">Düzenle</a>
+                            <a asp-controller="Kullanici" asp-action="Duzenle" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Düzenle</a>
                         </td>
                     </tr>
                 }

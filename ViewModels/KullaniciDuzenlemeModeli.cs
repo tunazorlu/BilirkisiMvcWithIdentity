@@ -9,6 +9,8 @@ namespace BilirkisiMvc.ViewModels
 
         [EmailAddress]
         public string? Email { get; set; }
+        [Phone]
+        public string? PhoneNumber { get; set; }
 
         [DataType(DataType.Password)]
         public string? Password { get; set; }

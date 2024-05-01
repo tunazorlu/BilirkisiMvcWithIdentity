@@ -14,6 +14,11 @@
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="control-label">Telefon No</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
 
     <div class="card">
         <div class="card-header">
@@ -42,7 +47,7 @@
             {
                 <div class="form-check">
                     <input name="SeciliRol" type="checkbox" value="@role" id="@role" class="form-check-input"
-                    @(Model.SeciliRol.Any(i => i == role) ? "checked" : "") />
+                    @(Model.SeciliRol != null && Model.SeciliRol.Any(i => i == role) ? "checked" : "") />
                     <label class="form-check-label" for="@role">@role</label>
                 </div>
             }

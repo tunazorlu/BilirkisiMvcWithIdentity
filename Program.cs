@@ -2,6 +2,8 @@ using BilirkisiMvc.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.MVC;
+using Syncfusion.Licensing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 });
 
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIzMDA2OEAzMjM1MmUzMDJlMzBNVm95S1dkOTdncEgwb0trb2FCRXltWmpnbUJBWDVzQjdPaUpaZmlRaE5FPQ==");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,6 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

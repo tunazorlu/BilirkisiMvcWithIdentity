@@ -32,7 +32,7 @@ namespace BilirkisiMvc.TagHelpers
         {
             var sortedUserNames = userNames.OrderBy(name => name.Substring(0, 1)).ToList(); //Kullanıcı adlarını sıralar
 
-            var html = "<ul>";
+            var html = "<ul style='margin-bottom:0;'>";
             foreach (var userName in sortedUserNames)
             {
                 html += $"<li>{userName}</li>";
