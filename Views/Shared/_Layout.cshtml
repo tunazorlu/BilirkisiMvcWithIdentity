@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Bilirkişi Raporu";
+}
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Bilirkisi Raporu</title>
+    <title>&copy; @ViewData["Title"] - @DateTime.UtcNow.Year</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BilirkisiMvc.styles.css" asp-append-version="true" />
@@ -25,6 +29,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Rol" asp-action="Listele">Roller</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Hesap" asp-action="Giris">Giriş</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -38,7 +45,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Bilirkisi Raporu
+            &copy; @DateTime.UtcNow.Year - Bilirkisi Raporu
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
