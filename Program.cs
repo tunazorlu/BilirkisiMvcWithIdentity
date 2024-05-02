@@ -4,10 +4,19 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.MVC;
 using Syncfusion.Licensing;
+using BilirkisiMvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddScoped<IEpostaGonderici, SmtpEpostaGonderici>(i => 
+    new SmtpEpostaGonderici(
+        builder.Configuration["EpostaAyarlar:Sunucu"], 
+        builder.Configuration.GetValue<int>("EpostaAyarlar:Port"), 
+        builder.Configuration.GetValue<bool>("EpostaAyarlar:SslAktif"), 
+        builder.Configuration["EpostaAyarlar:KullaniciAdi"], 
+        builder.Configuration["EpostaAyarlar:Parola"])
+        );
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<VtBaglaci>(options =>
@@ -16,7 +25,8 @@ builder.Services.AddDbContext<VtBaglaci>(options =>
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<VtBaglaci>();
+    .AddEntityFrameworkStores<VtBaglaci>()
+    .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -33,7 +43,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
-    options.SignIn.RequireConfirmedEmail = false;
+
+    options.SignIn.RequireConfirmedEmail = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
 });
 

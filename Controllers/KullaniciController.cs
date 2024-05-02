@@ -12,33 +12,6 @@ public class KullaniciController(UserManager<IdentityUser> userManager, RoleMana
         return View(userManager.Users);
     }
 
-    public IActionResult Ekle()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Ekle(KullaniciOlusturmaModeli model)
-    {
-        if (ModelState.IsValid)
-        {
-            var user = new IdentityUser
-            {
-                UserName = model.UserName,
-                Email = model.Email
-            };
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Listele");
-            }
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-        }
-        return View(model);
-    }
 
     public async Task<IActionResult> Duzenle(string id)
     {

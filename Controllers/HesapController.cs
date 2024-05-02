@@ -1,6 +1,7 @@
 using BilirkisiMvc.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BilirkisiMvc.Controllers
 {
@@ -21,6 +22,13 @@ namespace BilirkisiMvc.Controllers
                 if (user != null)
                 {
                     await signInManager.SignOutAsync();
+
+                    if (!await userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError("", "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayınız.");
+                        return View("Giris");
+                    }
+
                     var result = await signInManager.PasswordSignInAsync(user, girisModeli.Parola, girisModeli.BeniHatirla, true);
 
                     if (result.Succeeded)
@@ -34,7 +42,7 @@ namespace BilirkisiMvc.Controllers
                     {
                         var lockoutDate = await userManager.GetLockoutEndDateAsync(user);
                         var timeLeft = lockoutDate.Value.Subtract(DateTime.UtcNow);
-                        ModelState.AddModelError("", $"Hesabınız kilitlendi. {timeLeft.Minutes} dakika sonra tekrar deneyebilirsiniz.");
+                        ModelState.AddModelError("", $"Hesabınız kilitlendi. {timeLeft.Minutes + 1} dakika sonra tekrar deneyebilirsiniz.");
                     }
                     else
                     {
@@ -47,6 +55,60 @@ namespace BilirkisiMvc.Controllers
                 }
             }
             return View("Giris");
+        }
+
+        public IActionResult Ekle()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Ekle(KullaniciOlusturmaModeli model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email
+                };
+                IdentityResult result = await userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var url = Url.Action("EpostaOnayla", "Hesap", new { user.Id, token }, Request.Scheme);
+
+
+                    TempData["Hata"] = "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayınız.";
+                    return RedirectToAction("Giris", "Hesap");
+                }
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> EpostaOnayla(string Id, string token)
+        {
+            if (Id == null || token == null)
+            {
+                TempData["Hata"] = "Geçersiz token bilgisi. Lütfen tekrar deneyiniz.";
+                return View();
+            }
+            var user = await userManager.FindByIdAsync(Id);
+            if (user != null)
+            {
+                var result = await userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    TempData["Hata"] = "Hesabınız onaylandı.";
+                    return RedirectToAction("Giris", "Hesap");
+                }
+            }
+            TempData["Hata"] = "Kullanıcı bulunamadı.";
+            return View("");
         }
     }
 }

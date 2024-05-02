@@ -2,7 +2,7 @@
 
 <h2>Kullanıcı Ekle</h2>
 <hr />
-<form asp-action="Ekle" method="post">
+<form asp-controller="Hesap" asp-action="Ekle" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>

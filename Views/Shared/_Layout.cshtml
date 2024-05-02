@@ -1,5 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Bilirkişi Raporu";
+
+    if(TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-warning" role="alert">
+            @TempData["Mesaj"]
+        </div>
+    }
 }
 
 <!DOCTYPE html>
