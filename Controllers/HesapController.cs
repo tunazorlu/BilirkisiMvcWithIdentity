@@ -1,3 +1,4 @@
+using BilirkisiMvc.Models;
 using BilirkisiMvc.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BilirkisiMvc.Controllers
 {
-    public class HesapController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager) : Controller
+    public class HesapController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IEpostaGonderici epostaGonderici) : Controller
     {
         public IActionResult Giris()
         {
@@ -73,13 +74,15 @@ namespace BilirkisiMvc.Controllers
                     Email = model.Email
                 };
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var url = Url.Action("EpostaOnayla", "Hesap", new { user.Id, token }, Request.Scheme);
+                    var url = Url.Action("EpostaOnayla", "Hesap", new { user.Id, token });
 
-
-                    TempData["Hata"] = "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayınız.";
+                    await epostaGonderici.EpostaGonderAsync(user.Email, "Hesap Onayı", $"E-posta hesabınızı onaylamak için lütfen <a href='http://localhost:5270{url}'>tıklayınız</a>.");
+                    
+                    TempData["Mesaj"] = "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayınız.";
                     return RedirectToAction("Giris", "Hesap");
                 }
                 foreach (IdentityError error in result.Errors)
@@ -94,7 +97,7 @@ namespace BilirkisiMvc.Controllers
         {
             if (Id == null || token == null)
             {
-                TempData["Hata"] = "Geçersiz token bilgisi. Lütfen tekrar deneyiniz.";
+                TempData["Mesaj"] = "Geçersiz token bilgisi. Lütfen tekrar deneyiniz.";
                 return View();
             }
             var user = await userManager.FindByIdAsync(Id);
@@ -103,11 +106,11 @@ namespace BilirkisiMvc.Controllers
                 var result = await userManager.ConfirmEmailAsync(user, token);
                 if (result.Succeeded)
                 {
-                    TempData["Hata"] = "Hesabınız onaylandı.";
+                    TempData["Mesaj"] = "Hesabınız onaylandı.";
                     return RedirectToAction("Giris", "Hesap");
                 }
             }
-            TempData["Hata"] = "Kullanıcı bulunamadı.";
+            TempData["Mesaj"] = "Kullanıcı bulunamadı.";
             return View("");
         }
     }

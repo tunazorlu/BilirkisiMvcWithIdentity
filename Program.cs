@@ -10,11 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IEpostaGonderici, SmtpEpostaGonderici>(i => 
     new SmtpEpostaGonderici(
-        builder.Configuration["EpostaAyarlar:Sunucu"], 
-        builder.Configuration.GetValue<int>("EpostaAyarlar:Port"), 
-        builder.Configuration.GetValue<bool>("EpostaAyarlar:SslAktif"), 
-        builder.Configuration["EpostaAyarlar:KullaniciAdi"], 
-        builder.Configuration["EpostaAyarlar:Parola"])
+        builder.Configuration["EpostaGonderici:Sunucu"], 
+        builder.Configuration.GetValue<int>("EpostaGonderici:Port"), 
+        builder.Configuration.GetValue<bool>("EpostaGonderici:SslAktif"), 
+        builder.Configuration["EpostaGonderici:KullaniciAdi"], 
+        builder.Configuration["EpostaGonderici:Parola"])
         );
 
 builder.Services.AddControllersWithViews();
