@@ -1,10 +1,12 @@
 using BilirkisiMvc.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BilirkisiMvc.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class KullaniciController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) : Controller
 {
     public IActionResult Listele()

@@ -1,0 +1,23 @@
+@model ParolaYenilemeModeli
+
+<h2>Parola Sıfırla</h2>
+<hr />
+<form asp-action="ParolaYenile" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Token">
+        <div class="mb-3">
+        <label asp-for="Eposta" class="control-label">E-posta</label>
+        <input asp-for="Eposta" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Parola" class="control-label">Parola</label>
+        <input asp-for="Parola" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ParolaTekrar" class="control-label">Parola Tekrarı</label>
+        <input asp-for="ParolaTekrar" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gönder</button>
+</form>

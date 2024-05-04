@@ -1,5 +1,6 @@
 using BilirkisiMvc.Models;
 using BilirkisiMvc.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -58,11 +59,92 @@ namespace BilirkisiMvc.Controllers
             return View("Giris");
         }
 
+        public async Task<IActionResult> Cikis()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Giris");
+        }
+
+        public IActionResult ParolamiUnuttum()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ParolamiUnuttum(string Eposta)
+        {
+            if (string.IsNullOrEmpty(Eposta))
+            {
+                TempData["Mesaj"] = "Eposta adresini girin.";
+                return View();
+            }
+
+            var user = await userManager.FindByEmailAsync(Eposta);
+
+            if (user == null)
+            {
+                TempData["mesaj"] = "Eposta adresiyle eşleşen bir kullanıcı bulunamadı.";
+                return View();
+            }
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var url = Url.Action("ParolaYenile", "Hesap", new { user.Id, token });
+            await epostaGonderici.EpostaGonderAsync(Eposta, "Parola Sıfırlama", $"Parolanızı sıfırlamak için lütfen <a href='http://localhost:5270{url}'>tıklayın</a>.");
+
+            TempData["Mesaj"] = "Parola sıfırlama bağlantısı eposta adresinize gönderildi. Lütfen eposta adresinize erişerek parolanızı sıfırlayın.";
+            return View();
+        }
+
+        public IActionResult ParolaYenile(string Id, string token)
+        {
+            if (Id == null || token == null)
+            {
+                TempData["Mesaj"] = "Geçersiz token bilgisi. Lütfen tekrar deneyiniz.";
+                return RedirectToAction("Giris");
+            }
+            var model = new ParolaYenilemeModeli { Token = token };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ParolaYenile(ParolaYenilemeModeli model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Eposta);
+                if (user == null)
+                {
+                    TempData[("Mesaj")] = "Bu eposta adresiyle kayıtlı bir kullanıcı bulunamadı.";
+                    return RedirectToAction("Giris", "Hesap");
+                }
+                if (user != null)
+                {
+                    var result = await userManager.ResetPasswordAsync(user, model.Token, model.Parola);
+                    if (result.Succeeded)
+                    {
+                        TempData["Mesaj"] = "Parolanız başarıyla değiştirildi.";
+                        return RedirectToAction("Giris", "Hesap");
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(model);
+                }
+                TempData["Mesaj"] = "Kullanıcı bulunamadı.";
+                return View(model);
+            }
+            return View(model);
+        }
+
+        [Authorize]
         public IActionResult Ekle()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Ekle(KullaniciOlusturmaModeli model)
         {
@@ -80,9 +162,9 @@ namespace BilirkisiMvc.Controllers
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     var url = Url.Action("EpostaOnayla", "Hesap", new { user.Id, token });
 
-                    await epostaGonderici.EpostaGonderAsync(user.Email, "Hesap Onayı", $"E-posta hesabınızı onaylamak için lütfen <a href='http://localhost:5270{url}'>tıklayınız</a>.");
-                    
-                    TempData["Mesaj"] = "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayınız.";
+                    await epostaGonderici.EpostaGonderAsync(user.Email, "Hesap Onayı", $"E-posta hesabınızı onaylamak için lütfen <a href='http://localhost:5270{url}'>tıklayın.</a>");
+
+                    TempData["Mesaj"] = "Lütfen eposta adresinize gönderilen bağlantı ile hesabınızı onaylayın.";
                     return RedirectToAction("Giris", "Hesap");
                 }
                 foreach (IdentityError error in result.Errors)
@@ -112,6 +194,11 @@ namespace BilirkisiMvc.Controllers
             }
             TempData["Mesaj"] = "Kullanıcı bulunamadı.";
             return View("");
+        }
+    
+            public IActionResult YetkiHatasi()
+        {
+            return View();
         }
     }
 }
