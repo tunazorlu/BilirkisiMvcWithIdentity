@@ -1,8 +1,8 @@
 @model GirisModeli
 
-<h2>Giriş Yap</h2>
-<hr />
-<form asp-action="Giris" method="post">
+<h2 style="margin: 0 auto; width: 20%;">Giriş Yap</h2>
+<hr style="margin: 0 auto; width: 20%;"/>
+<form asp-action="Giris" method="post" class="center-form">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="Eposta" class="control-label">E-posta</label>
@@ -24,3 +24,10 @@
         <a asp-action="ParolamiUnuttum" asp-controller="Hesap" class="btn btn-warning">Şifremi Unuttum</a>
     </div>
 </form>
+
+<style>
+    .center-form {
+    margin: 0 auto;
+    width: 20%;
+}
+</style>

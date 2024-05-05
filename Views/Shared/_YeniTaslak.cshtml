@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Bilirkişi Raporu";
+
+    if (TempData["Mesaj"] != null)
+    {
+        <div class="alert alert-warning" role="alert">
+            @TempData["Mesaj"]
+        </div>
+    }
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&copy; @ViewData["Title"] - @DateTime.UtcNow.Year</title>
+    <link rel="stylesheet" href="~/css/w3.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BilirkisiMvc.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:10%">
+        <h3 class="w3-bar-item">Bilirkişi</h3>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                <a class="nav-link text-dark" asp-area="" asp-controller="Kullanici" asp-action="Listele">Kullanıcılar</a>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Rol" asp-action="Listele">Roller</a>
+            }
+        }
+        <a href="#" class="w3-bar-item w3-button">Link 1</a>
+        <a href="#" class="w3-bar-item w3-button">Link 2</a>
+        <a href="#" class="w3-bar-item w3-button">Link 3</a>
+    </div>
+
+    <!-- Page Content -->
+    <div id="body-container" style="margin-left:10%">
+        <div class="w3-container w3-teal">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div style="float: right; display: inline-block;"><a class="nav-link text-dark" asp-area=""
+                        asp-controller="Hesap" asp-action="Cikis">Çıkış yap</a></div>
+                <div style="float: left; display: inline-block;"><a class="nav-link text-dark">Merhaba, @User.Identity.Name
+                        hoşgeldin.</a></div>
+
+            }
+            else
+            {
+                <a style="float: right; display: inline-block;" class="nav-link text-dark" asp-area=""
+                    asp-controller="Hesap" asp-action="Giris">Giriş yap</a>
+                <a style="float: right; display: inline-block;" class="nav-link text-dark" asp-area=""
+                    asp-controller="Hesap" asp-action="Ekle">Kayıt ol</a>
+            }
+        </div>
+        <div class="orta" style="padding-left:10px; margin-left:10px;">
+            @RenderBody()
+        </div>
+
+        <div id="footer" style="margin-left:40%">
+            &copy; @DateTime.UtcNow.Year - Bilirkisi Raporu
+        </div>
+    </div>
+</body>
+
+</html>

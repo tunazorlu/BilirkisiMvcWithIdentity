@@ -1,8 +1,8 @@
 @model KullaniciOlusturmaModeli
 
-<h2>Hesap Oluştur</h2>
-<hr />
-<form asp-controller="Hesap" asp-action="Ekle" method="post">
+<h2 class="center-form">Kayıt Ol</h2>
+<hr class="center-form"/>
+<form asp-controller="Hesap" asp-action="Ekle" method="post" class="center-form">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="UserName" class="control-label">Kullanıcı Adı</label>
@@ -25,6 +25,13 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <button type="submit" class="btn btn-primary"  style="float:right;">Kaydet</button>
     </div>
 </form>
+
+<style>
+    .center-form {
+    margin: 0 auto;
+    width: 20%;
+}
+</style>

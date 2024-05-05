@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BilirkisiMvc.Controllers
 {
+#pragma warning disable CS9113 // Parameter is unread.
     public class HesapController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IEpostaGonderici epostaGonderici) : Controller
+#pragma warning restore CS9113 // Parameter is unread.
     {
         public IActionResult Giris()
         {
@@ -31,7 +33,9 @@ namespace BilirkisiMvc.Controllers
                         return View("Giris");
                     }
 
+#pragma warning disable CS8604 // Possible null reference argument.
                     var result = await signInManager.PasswordSignInAsync(user, girisModeli.Parola, girisModeli.BeniHatirla, true);
+#pragma warning restore CS8604 // Possible null reference argument.
 
                     if (result.Succeeded)
                     {
@@ -138,13 +142,13 @@ namespace BilirkisiMvc.Controllers
             return View(model);
         }
 
-        [Authorize]
+
         public IActionResult Ekle()
         {
             return View();
         }
 
-        [Authorize]
+
         [HttpPost]
         public async Task<IActionResult> Ekle(KullaniciOlusturmaModeli model)
         {
