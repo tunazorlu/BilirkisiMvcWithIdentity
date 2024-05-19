@@ -1,26 +1,4 @@
-@{ 
-    Layout = null; 
-    ViewData["Title"] = "Bilirkişi Raporu";
-
-    if (TempData["Mesaj"] != null)
-    {
-        <div class="alert alert-warning" role="alert">
-            @TempData["Mesaj"]
-        </div>
-    }
-}
-
 @model GirisModeli
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&copy; @ViewData["Title"] - @DateTime.UtcNow.Year</title>
-    <link rel="stylesheet" href="~/css/w3.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BilirkisiMvc.styles.css" asp-append-version="true" />
-</head>
 
 <h2 style="margin: 0 auto; width: 20%;">Giriş Yap</h2>
 <hr style="margin: 0 auto; width: 20%;"/>

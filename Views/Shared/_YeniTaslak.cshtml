@@ -33,7 +33,6 @@
             {
                 <a class="nav-link text-dark" asp-area="" asp-controller="Kullanici" asp-action="Listele">Kullanıcılar</a>
                 <a class="nav-link text-dark" asp-area="" asp-controller="Rol" asp-action="Listele">Roller</a>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Soap" asp-action="Listele">Üniversiteler</a>
             }
         }
         <a href="#" class="w3-bar-item w3-button">Link 1</a>
@@ -50,6 +49,7 @@
                         asp-controller="Hesap" asp-action="Cikis">Çıkış yap</a></div>
                 <div style="float: left; display: inline-block;"><a class="nav-link text-dark">Merhaba, @User.Identity.Name
                         hoşgeldin.</a></div>
+
             }
             else
             {
